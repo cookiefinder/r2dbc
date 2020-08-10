@@ -1,9 +1,6 @@
 package com.maple.r2dbc;
 
-import io.r2dbc.postgresql.PostgresqlConnectionFactory;
-import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
-import io.r2dbc.spi.ConnectionFactoryOptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,8 +25,11 @@ public class R2dbcApplication {
 
     @GetMapping("/users/{id}")
     public Mono<String> getUserById(@PathVariable Long id) {
-        service.test();
-        return Mono.just("success");
+        // this will return empty; flatMap() isn't execute when mono is void
+//        Mono<Void> mono = Mono.empty();
+//        return mono.flatMap(a -> Mono.just("s"));
+
+        return service.test().then(Mono.just("success")); // this will return "success"
     }
 
     @Bean
